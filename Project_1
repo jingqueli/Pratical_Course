@@ -1,4 +1,3 @@
-#implement the naïve birthday attack of reduced SM3
 import hashlib
 import binascii
 import struct
@@ -55,21 +54,28 @@ def compression_func(IV_0,data):
     for i in range(0,16):
         
         W.append(data[i*4:(i+1)*4])#w里面装的是字节串
-
+        #if(data[i*4:(i+4)*4]==' ')
+    
     #print(W)
     #前十六个应该是没问题
     for i in range(16,68):
         P1_data=byte_stream_xor(W[i-16],W[i-9])
+        
         hex_int=int(W[i-3].hex(),16)#直接一步到位把w中的字节串转为10进制数
+            
         
         #转为16进制整数的目的是进行循环移位(转不成，还是弄成十进制数了)
         #在进行字节流异或时需要转换回去
         hex_str=left_rotate(hex_int,15)[2:]#循环左移15位,
         #print('hex_str',hex_str)
-        byte_hex=bytes.fromhex(hex_str)#转换为字节串
+        if(hex_str!='0'):
+            byte_hex=bytes.fromhex(hex_str)#转换为字节串
+        if(hex_str=='0'):
+            byte_hex=b'0'
+        
         P1_data=byte_stream_xor(P1_data,byte_hex)
         #P1_data也是四字节的
-        P1_re=P1(P1_data)#P1_re  is  int
+        P1_re=P1(P1_data)&mask#P1_re  is  int
         #P1_re一直都是四字节的数据（整数，十进制）
         hex_int=int(W[i-13].hex(),16)&mask
         #print(hex(hex_int))
@@ -150,38 +156,47 @@ def padding_func(data):
 
     #len()输出字节流长度
     length=len(data)*8#length of bit stream
+    #print('length',length)
     bin_length=bin(length)[2:]
+    #print('消息的二进制长度为:',len(bin_length))
     padding_length=64-len(bin_length)
+    #所以padding_length是在长度位上不满64位填充的0，和表示长度的bin_length之和应该是64位
     padding_length='0'*padding_length
-    #print(padding)
-    #length=padding_length+bin_length
-    data_remaining_length=len(data)%512
-    length0=512-data_remaining_length-64-1
+    
+    data_remaining_length=len(bin_length)%512
+    length0=512-length-64-1#该数值表示需要填充的零的个数
     pad0='0'*length0
     binary_string=binary_data+'1'+pad0+padding_length+bin_length
+    #print('length of binary_data',len(binary_data))
+    #print('length of pad0',len(pad0))
+    #print('length of padding_length',len(padding_length))
+    #print('length of bin_length',len(bin_length))
+    #print(binary_string)
+    print('binary_string长度',len(binary_string))
 
     #以下将二进制字符串转换为字节串
-    binary_string = binary_string.replace(' ', '')
+    byte_array = bytearray()
+    for i in range(0, len(binary_string), 8):
+        byte = int(binary_string[i:i+8], 2)  # 将每个八位二进制数转换为整数
+        byte_array.append(byte)  # 添加到字节串中
 
-    # 分割二进制字符串为每个字节
-    byte_list = [binary_string[i:i+8] for i in range(0, len(binary_string), 8)]
-
-    # 将每个字节从二进制转换为整数
-    byte_list = [int(byte, 2) for byte in byte_list]
-
-    # 使用 bytes() 函数创建字节串
-    byte_stream = bytes(byte_list)
-
-    #print("字节串：", byte_stream)
-    #print("填充后的字节串",byte_stream)
-    return byte_stream
+    bytes_result = bytes(byte_array)  # 转换为字节串
+    return bytes_result
     
-def seg_func(data):#该函数将信息分组后循环调用压缩函数，得到的输出即为杂凑值
+def seg_func(data):
     #输入信息类型为bit stream
     #data=b'Hello World You are so happy'
     IV=[]
-    group_number=int(len(data)/64)#64byte per group
+    group_number=int(len(data)/64)+1#64byte per group
     #print("group number",group_number)
+    if(group_number==1):
+        padding_data=padding_func(data[:])
+        IV=compression_func(IV0,padding_data)
+        for i in range(0,8):
+            IV[i]=hex(IV[i])[2:]
+        padded_IV=[s.zfill(8) for s in IV]
+        final_IV=''.join(padded_IV)
+        return final_IV
     for i in range(0,group_number):
         if(i==0):
             IV=compression_func(IV0,data[0:64])
@@ -207,7 +222,7 @@ def sm3_hash(data):
     hash_value = hash_object.hexdigest()
     return hash_value
 
-#函数体
+# 示例用法
 #a='0x21'[2:]
 #a=int(a,16)
 #b=0x11
@@ -226,3 +241,14 @@ data=b'To see a world in a grain of sand.And a heaven in a wild flower.Hod infin
 #print(hex(int(hex_s,16)))
 re=seg_func(data)
 print(re)
+#W=b'AjdklfHdfn'
+#print(hex(W.decode()))
+#print(int('Test'.hex(),16))
+#print(hex(70655608415212328466912085763263534874646195139384))
+#print(b'\x00\x00\x00\x00'.hex())
+a=b'dajslkfjnerg'
+print(seg_func(a))
+
+
+
+
