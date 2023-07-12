@@ -1,0 +1,36 @@
+#Project_5
+import hashlib
+
+def hash_func(data):
+    sha256 = hashlib.sha256()
+    sha256.update(data.encode('utf-8'))
+    return sha256.hexdigest()
+
+def build_merkle_tree(data_list):
+    leaf_hashes = [hash_func(data) for data in data_list]
+    merkle_tree = [leaf_hashes]
+
+    while len(leaf_hashes) > 1:
+        if len(leaf_hashes) % 2 != 0:
+            leaf_hashes.append(leaf_hashes[-1])
+
+        parent_hashes = []
+        for i in range(0, len(leaf_hashes), 2):
+            combined_data = leaf_hashes[i] + leaf_hashes[i+1]
+            parent_hashes.append(hash_func(combined_data))
+
+        merkle_tree.append(parent_hashes)
+        leaf_hashes = parent_hashes
+
+    return merkle_tree
+
+data_list = ['data1', 'data2', 'data3', 'data4', 'data5']
+merkle_tree = build_merkle_tree(data_list)
+
+# 打印每一层的节点
+for level, layer in enumerate(merkle_tree):
+    print(f"Level {level}: {layer}")
+
+# 打印根哈希值
+root_hash = merkle_tree[-1][0]
+print("Root Hash:", root_hash)
