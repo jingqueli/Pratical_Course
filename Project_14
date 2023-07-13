@@ -1,0 +1,55 @@
+import binascii
+from gmssl import sm2
+from Cryptodome.Cipher import AES
+from Cryptodome.Random import get_random_bytes
+
+
+class PGP:
+    def __init__(nclass,mes):#
+        #mse is string,not byte stream
+        mes=nclass.padding_func(mes)
+        print('padded mes:',mes)
+        nclass.iv=get_random_bytes(16)#生成初始IV
+        nclass.key_AES=get_random_bytes(16)#生成AES密钥
+        nclass.crypt_AES=AES.new(nclass.key_AES, AES.MODE_CBC, nclass.iv)
+
+        nclass.private_key = '0bedf1f07b32b1168dfd5f64862d85ea647f91edb039da1f27f8fee92b928dda'#设置ms2私钥
+        #nclass.private_key = sm2.CryptSM2().generate_private_key()
+        print('private_key,',nclass.private_key)
+        nclass.public_key = '6ae77fcf2fe923fd888582cf3151d9a1bc2a5ca80064e0d07f6747c78e3fa4554cbef52f11605a495821acdb28e9314444aee895f8ca05495cbfe861a41681cb'
+        #nclass.public_key = nclass.private_key.public_key()#用私钥获取公钥
+        print('public_key:',nclass.public_key)
+        nclass.sm2_crypt = sm2.CryptSM2(public_key=nclass.public_key, private_key=nclass.private_key)
+        nclass.message=mes
+    
+
+    def padding_func(nclass,mes):
+        length_mes=len(mes.encode())
+        print('length_mes',length_mes)
+        pad_len=16-(length_mes%16)
+        pad_mes=mes.encode()+b'0'*pad_len
+        pad_mes=pad_mes.decode('utf-8')
+        return pad_mes
+
+    #PGP加密
+    def encode(nclass):
+        enc_key = nclass.sm2_crypt.encrypt(nclass.key_AES)
+        enced_m=nclass.encrypt_massage(nclass.message)
+        final=enc_key+enced_m
+        mes=binascii.b2a_base64(final).decode('utf-8')
+        return mes
+
+
+    #对于消息进行AES加密
+    def encrypt_massage(nclass,m):
+        message_byte=bytes(m,encoding='utf-8')
+        encrypt_mes=nclass.crypt_AES.encrypt(message_byte) 
+        return encrypt_mes
+
+
+data="Shadow,and light down,Sunny and wind"
+PGP_mes=PGP(data).encode()
+print(PGP_mes)
+
+
+
