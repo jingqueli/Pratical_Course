@@ -9,28 +9,28 @@ int main()
 
 
 
-    // ¼ÓÃÜmp4ÎÄ¼ş
+    // åŠ å¯†mp4æ–‡ä»¶
     FILE* fp = fopen("D:\\QQDownload\\sm4_self\\video.mp4", "rb");
     if (fp == NULL) {
         printf("Failed to open file.\n");
         return -1;
     }
 
-    // »ñÈ¡ÎÄ¼ş³¤¶È
+    // è·å–æ–‡ä»¶é•¿åº¦
     fseek(fp, 0, SEEK_END);
     long file_size = ftell(fp);
     rewind(fp);
     printf("file size = %ld\n", file_size);
     int padding = 16 * (file_size/16 + 1) - file_size;
     printf("%d", padding);
-    // ¶ÁÈ¡ÎÄ¼şÊı¾İ
+    // è¯»å–æ–‡ä»¶æ•°æ®
     unsigned char* buffer = (unsigned char*)malloc((file_size + padding)  * sizeof(char));
     fread(buffer, sizeof(char), file_size, fp);
     memset(buffer + file_size, padding, padding);
 
-    // ×ª»»³ÉÊ®Áù½øÖÆ×Ö·û´®²¢´òÓ¡Êä³ö
+    // è½¬æ¢æˆåå…­è¿›åˆ¶å­—ç¬¦ä¸²å¹¶æ‰“å°è¾“å‡º
 
-    // Ğ´ÈëÊ®Áù½øÖÆ×Ö·û´®µ½ÎÄ¼ş
+    // å†™å…¥åå…­è¿›åˆ¶å­—ç¬¦ä¸²åˆ°æ–‡ä»¶
     FILE* fp_output = fopen("output.txt", "w");
     if (fp == NULL) {
         printf("Failed to create file.\n");
