@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"define.h"
+#include"define_sm4.h"
 #include<cstdio>
 int main()
 {
