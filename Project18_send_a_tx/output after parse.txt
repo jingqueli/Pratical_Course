@@ -1,0 +1,337 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+  
+    BTC Transaction f96ba3e152b89a7318f88566d192ef37fcd44dd25b5305b5e1dedcd6b2c7861e
+  
+
+      | BlockCypher
+    
+
+
+
+
+
+
+
+
+
+
+Toggle navigation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BTC Testnet 
+
+
+Bitcoin
+Ethereum
+Litecoin
+DogeCoin
+Dash
+BlockCypher Testnet
+Bitcoin Testnet
+
+
+
+
+
+
+
+
+
+
+
+Bitcoin Testnet
+
+
+
+
+
+
+
+
+Bitcoin
+
+
+Bitcoin Testnet
+
+
+Ethereum
+
+
+Litecoin
+
+
+Dogecoin
+
+
+Dash
+
+
+BlockCypher Testnet
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bitcoin Testnet Transaction
+
+f96ba3e152b89a7318f88566d192ef37fcd44dd25b5305b5e1dedcd6b2c7861e
+
+
+
+
+
+
+
+Amount Transacted
+561.47484828 BTC
+
+
+Fees
+0.000147 BTC
+
+
+
+Received
+
+
+
+2023-07-30 15:02 GMT
+
+
+
+
+Confirmations
+
+
+
+
+
+
+6+
+
+
+
+
+
+
+
+
+
+Confidence
+
+
+
+
+
+100.00%
+
+
+
+Miner Preference
+
+
+high
+
+
+
+
+Advanced Details
+
+
+
+
+
+
+
+Block Hash
+
+000000000000001a936af25620e16f54ff15939c02c4b242c2950af8d83f2a83
+See Block
+
+
+
+Block Height
+
+2,469,856
+
+
+
+Transaction Index
+
+3
+(permalink)
+
+
+
+Size
+228 bytes
+
+
+Virtual Size
+147 vbytes
+
+
+Lock Time
+2469855
+
+
+Version
+2
+
+
+
+
+
+API Call
+
+
+
+API Docs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Details
+
+
+
+
+1 Input Consumed
+
+
+561.47499528 BTC
+
+from
+
+tb1qvjdm3y40zjq68c9mv4hnrw86cgn55a0dquq6ll
+(output)
+
+
+
+
+
+
+2 Outputs Created
+
+
+0.01759267 BTC
+
+to
+
+mv15LxNVtZ2uaNCmzZ8RL4RzL9oNUPQYp7
+
+(unspent)
+
+
+
+
+561.45725561 BTC
+
+to
+
+mnmH3r57JXQ2BjyketXxuyS6cot5dzYYE7
+
+(spent)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+We are social
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fork me on GitHub
+
+
+
+
+
+Powered by BlockCypher Web Services
+© 2023 - BlockCypher
+
+
+
+
+
+
+
+
+
+
+
+
+
