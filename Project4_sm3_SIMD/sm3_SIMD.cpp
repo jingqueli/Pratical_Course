@@ -7,7 +7,6 @@
 # include <immintrin.h>
 #include <chrono>
 using namespace std;
-# define _mm_rotl_epi32(X,i) _mm_xor_si128(_mm_slli_epi32((X),(i)), _mm_srli_epi32((X),32-(i)))
 
 void IV0_assignment(sm3_context* ctx) {
     ctx->iplen = 0;
@@ -15,7 +14,7 @@ void IV0_assignment(sm3_context* ctx) {
     ctx->state[2] = 0x172442D7,ctx->state[3] = 0xDA8A0600;
     ctx->state[4] = 0xA96F30BC,ctx->state[5] = 0x163138AA;
     ctx->state[6] = 0xE38DEE4D,ctx->state[7] = 0xB0FB0E4E;
-}//³õÊ¼IV¸³Öµ
+}//åˆå§‹IVèµ‹å€¼
 
 
 void sm3_process(sm3_context* ctx, uint8_t data[64]) {
@@ -43,7 +42,7 @@ void sm3_process(sm3_context* ctx, uint8_t data[64]) {
         _mm_storeu_si128((__m128i*)(W1 + j), X);
     }
 
-//FFº¯Êı£¬GGº¯Êı
+//FFå‡½æ•°ï¼ŒGGå‡½æ•°
 #define FF0(x,y,z) ( (x) ^ (y) ^ (z))
 #define FF1(x,y,z) (((x) & (y)) | ( (x) & (z)) | ( (y) & (z)))
 
@@ -57,8 +56,8 @@ void sm3_process(sm3_context* ctx, uint8_t data[64]) {
 #define P0(x) ((x) ^  ROTL((x),9) ^ ROTL((x),17))
 #define P1(x) ((x) ^  ROTL((x),15) ^ ROTL((x),23))
 
-
-    //ÏûÏ¢À©Õ¹
+# define _mm_rotl_epi32(X,i) _mm_xor_si128(_mm_slli_epi32((X),(i)), _mm_srli_epi32((X),32-(i)))
+    //æ¶ˆæ¯æ‰©å±•
     for (j = 16; j < 68; j += 4) {
         /* X = (W1[j - 3], W1[j - 2], W1[j - 1], 0) */
         X = _mm_loadu_si128((__m128i*)(W1 + j - 3));
@@ -102,7 +101,7 @@ void sm3_process(sm3_context* ctx, uint8_t data[64]) {
         _mm_storeu_si128((__m128i*)(W2 + j), X);
     }
 
-    //µü´úÑ¹Ëõ
+    //è¿­ä»£å‹ç¼©
     A = ctx->state[0];
     B = ctx->state[1];
     C = ctx->state[2];
@@ -112,7 +111,7 @@ void sm3_process(sm3_context* ctx, uint8_t data[64]) {
     G = ctx->state[6];
     H = ctx->state[7];
 
-    //Ñ¹Ëõº¯Êı
+    //å‹ç¼©å‡½æ•°
     for (j = 0; j < 16; j++) {
         SS1 = ROTL((ROTL(A, 12) + E + ROTL(T[j], j)), 7);
         SS2 = SS1 ^ ROTL(A, 12);
@@ -159,10 +158,7 @@ void sm3_process(sm3_context* ctx, uint8_t data[64]) {
     ctx->state[5] ^= F;
     ctx->state[6] ^= G;
     ctx->state[7] ^= H;
-/**/
 #ifdef _DEBUG
-    printf("   %08x %08x %08x %08x %08x %08x %08x %08x\n", ctx->state[0], ctx->state[1], ctx->state[2],
-        ctx->state[3], ctx->state[4], ctx->state[5], ctx->state[6], ctx->state[7]);
 #endif
 }
 
@@ -172,8 +168,8 @@ void sm3_process(sm3_context* ctx, uint8_t data[64]) {
  */
 void sm3_update(sm3_context* ctx, unsigned char* input, int iplen_t) {
     /*
-     * iplen_t ´ıÌî³ädataµÄ³¤¶È
-     * input ´ıÌî³äµÄdata
+     * iplen_t å¾…å¡«å……dataçš„é•¿åº¦
+     * input å¾…å¡«å……çš„data
      */
     int fill;
     unsigned long left;
@@ -187,9 +183,9 @@ void sm3_update(sm3_context* ctx, unsigned char* input, int iplen_t) {
     ctx->iplen += iplen_t;             
 
     if (left && iplen_t >= fill) {
-        memcpy((void*)(ctx->buffer + left), (void*)input, fill);     // ²¹È«µ±Ç°·Ö¿éµ½64×Ö½Ú
+        memcpy((void*)(ctx->buffer + left), (void*)input, fill);     // è¡¥å…¨å½“å‰åˆ†å—åˆ°64å­—èŠ‚
         sm3_process(ctx, ctx->buffer);                              
-        input += fill;                                              // ÌîÈëÏÂÒ»¸ö·Ö¿éµÄµÚÒ»¸ö±íÏîÎ»ÖÃ¸üĞÂ
+        input += fill;                                              // å¡«å…¥ä¸‹ä¸€ä¸ªåˆ†å—çš„ç¬¬ä¸€ä¸ªè¡¨é¡¹ä½ç½®æ›´æ–°
         iplen_t -= fill;                                            
         left = 0;                                                   
     }
@@ -198,11 +194,11 @@ void sm3_update(sm3_context* ctx, unsigned char* input, int iplen_t) {
         sm3_process(ctx, input);
         input += 64;
         iplen_t -= 64;
-    }// Èô´ıÌî³ädata³¤¶È²»Ğ¡ÓÚ64bitÔò½«64bitÌîÈëÒ»¸ö¿é²¢½øĞĞ²Ù×÷
+    }// è‹¥å¾…å¡«å……dataé•¿åº¦ä¸å°äº64bitåˆ™å°†64bitå¡«å…¥ä¸€ä¸ªå—å¹¶è¿›è¡Œæ“ä½œ
 
     if (iplen_t > 0) {
         memcpy((void*)(ctx->buffer + left), (void*)input, iplen_t);
-    }//´øÌî³äÏûÏ¢Ğ´Èëbuffer
+    }//å¸¦å¡«å……æ¶ˆæ¯å†™å…¥buffer
 }
 
 static unsigned char sm3_padding[64] =
@@ -211,12 +207,12 @@ static unsigned char sm3_padding[64] =
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};//ÓÃ1·Ö¸îºó£¬ÔÚÏûÏ¢ºÍÏûÏ¢³¤¶ÈµÄÖĞ¼äÈ«²¿Ìî³ä0
+};//ç”¨1åˆ†å‰²åï¼Œåœ¨æ¶ˆæ¯å’Œæ¶ˆæ¯é•¿åº¦çš„ä¸­é—´å…¨éƒ¨å¡«å……0
 
 /*
  * SM3 final digest
  */
- /* unsigned char b[i] = unsigned long n µÄi  -  i+8Î» */
+ /* unsigned char b[i] = unsigned long n çš„i  -  i+8ä½ */
 #ifndef UN_PUT
 #define UN_PUT(n,b,i)                             \
 {                                                       \
@@ -229,7 +225,7 @@ static unsigned char sm3_padding[64] =
 void sm3_finish(sm3_context* ctx, unsigned char output[32]) {
     unsigned long last, padn;
     unsigned long high, low;
-    unsigned char msglen[8];        // ÏûÏ¢³¤¶È
+    unsigned char msglen[8];        // æ¶ˆæ¯é•¿åº¦
 
     high = (ctx->iplen >> 29);
     low = (ctx->iplen << 3);
@@ -237,11 +233,11 @@ void sm3_finish(sm3_context* ctx, unsigned char output[32]) {
     UN_PUT(high, msglen, 0);
     UN_PUT(low, msglen, 4);
 
-    last = ctx->iplen & 0x3F;     // Ã¿64×Ö½ÚÒ»¸ö·Ö×é
+    last = ctx->iplen & 0x3F;     // æ¯64å­—èŠ‚ä¸€ä¸ªåˆ†ç»„
     padn = (last < 56) ? (56 - last) : (120 - last);            
 
-    sm3_update(ctx, (unsigned char*)sm3_padding, padn);         //Ìî³äÈ«0
-    sm3_update(ctx, msglen, 8);                                 // ×îºóÌî³ä8×Ö½ÚµÄÏûÏ¢³¤¶È
+    sm3_update(ctx, (unsigned char*)sm3_padding, padn);         //å¡«å……å…¨0
+    sm3_update(ctx, msglen, 8);                                 // æœ€åå¡«å……8å­—èŠ‚çš„æ¶ˆæ¯é•¿åº¦
 
     UN_PUT(ctx->state[0], output, 0 );UN_PUT(ctx->state[1], output, 4);
     UN_PUT(ctx->state[2], output, 8 );UN_PUT(ctx->state[3], output, 12);
