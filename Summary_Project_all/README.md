@@ -512,6 +512,8 @@ for i, hash_value in enumerate(hash_chain):
 > PATH= /usr/local/ARM-toolchain/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linuxgnu/bin:"${PATH}"
 > ```
 > 
+> > ![](C:\Users\Mr.smile\AppData\Roaming\marktext\images\2023-08-04-23-21-31-image.png)
+> > 
 > > 实测后发现路径配置使用上面语句没有权限，加上sudo后可以进入文件但没办法修改内容，使用sudo nano /etc/bash.bashrc可以进入文件并修改。
 
 > #### 5, 环境变量生效与测试
@@ -550,6 +552,8 @@ for i, hash_value in enumerate(hash_chain):
 > ```
 > 
 > /home/linux-nzy/Desktop/Hello: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for GNU/Linux 3.7.0, BuildID[sha1]=ab20ba9d0ce88a5f64c7dfbce6efac81a58b3613, with debug_info, not stripped
+> 
+> ![](C:\Users\Mr.smile\AppData\Roaming\marktext\images\2023-08-04-23-19-57-image.png)
 > 
 > **可以看到确实是在ARM架构下** 
 > 
